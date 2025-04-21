@@ -129,7 +129,6 @@ def is_admin():
     return session.get('is_admin', False)
 
 def rate_limit_check(user_id, action, window=10, limit=5):
-    # 간단한 메모리 기반 rate limit (과제용)
     if not hasattr(app, 'rate_limit'):
         app.rate_limit = {}
     now = int(time.time())
@@ -311,7 +310,6 @@ def report():
         targettype = form.targettype.data
         db = get_db()
         cursor = db.cursor()
-        # 신고 남용 방지: 동일 유저가 동일 대상 1시간 내 1회만
         now = int(time.time())
         cursor.execute('SELECT ts FROM report WHERE reporterid=? AND targetid=? AND targettype=? ORDER BY ts DESC LIMIT 1',
                        (session['userid'], targetid, targettype))
@@ -323,7 +321,6 @@ def report():
         cursor.execute('INSERT INTO report (id, reporterid, targetid, reason, targettype, ts) VALUES (?, ?, ?, ?, ?, ?)', 
                        (reportid, session['userid'], targetid, reason, targettype, now))
         db.commit()
-        # 신고 누적 차단
         if targettype == 'product':
             cursor.execute('SELECT COUNT(*) FROM report WHERE targetid=? AND targettype="product"', (targetid,))
             cnt = cursor.fetchone()[0]
