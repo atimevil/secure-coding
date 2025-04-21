@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}관리자{% endblock %}
+{% block content %}
+<h2>관리자 페이지</h2>
+<h3>유저 목록</h3>
+<ul>
+    {% for user in users %}
+        <li>{{ user['username'] }} ({{ user['status'] }})</li>
+    {% endfor %}
+</ul>
+<h3>상품 목록</h3>
+<ul>
+    {% for product in products %}
+        <li>{{ product['title'] }} ({{ product['status'] }})</li>
+    {% endfor %}
+</ul>
+<h3>신고 목록</h3>
+<ul>
+    {% for report in reports %}
+        <li>{{ report['targettype'] }} - {{ report['targetid'] }}: {{ report['reason'] }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}
