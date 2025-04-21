@@ -1,0 +1,28 @@
+<!-- templates/product_detail.html -->
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <img src="{{ url_for('static', filename='uploads/' + product.image) }}" 
+             class="img-fluid" alt="{{ product.name }}">
+    </div>
+    <div class="col-md-6">
+        <h2>{{ product.name }}</h2>
+        <p class="text-muted">Price: ${{ "%.2f"|format(product.price) }}</p>
+        <p>{{ product.description }}</p>
+        <p>Seller: {{ product.seller.username }}</p>
+        
+        {% if current_user.is_authenticated %}
+        <form method="POST" action="{{ url_for('report') }}">
+            <input type="hidden" name="target_type" value="product">
+            <input type="hidden" name="target_id" value="{{ product.id }}">
+            <div class="form-group">
+                <textarea name="reason" class="form-control" 
+                          placeholder="Report reason..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-danger">Report Product</button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
